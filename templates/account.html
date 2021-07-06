@@ -1,0 +1,99 @@
+{% extends "base_layout.html" %}
+
+{% block head %}
+{{ super() }}
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#create_account').click(function() {
+                $.ajax({
+                    url: "/app/create",
+                    type: "GET",
+                    success : function(data) {
+                        console.log(data);
+                        $('#account-address').append(data['address']);
+                        $('#account-passphrase').append(data['passphrase']);
+                    },
+                    error: function(data) {
+                        alert(data);
+                    }
+                });
+
+                return false;
+            });
+
+
+            $('#get_balance').click(function() {
+                $.ajax({
+                    url: "/app/balance",
+                    type: "GET",
+                    success : function(data) {
+                        console.log(data);
+                        $('#account-address_2').append('Account: ' + data['address'])
+                        $('#account-balance').append(data['balance'] + ' microAlgo')
+                    },
+                    error: function(data) {
+                        alert(data);
+                    }
+                });
+
+                return false;
+            });
+
+
+        });
+
+</script>
+
+{% endblock %}
+
+
+{% block content_body %}
+{{ super() }}
+<div class="row">
+
+    <!--Sidebar content-->
+    <div class="col-md-2">
+        <ul class="nav nav-pills nav-stacked">
+        </ul>
+    </div>
+
+    <!--Body content-->
+    <div class="col-md-10">
+        <h2>Basic account creation</h2>
+
+        <div class="panel">
+            <div class="panel-body">
+                <div>
+                    <button type="button" class="btn btn-primary" id="create_account">Create Account</button>
+                </div>
+
+                <p>
+                    <div class="panel-title">Account:</div>
+                    <div id="account-address"></div>
+                </p>
+
+                <p>
+                    <div class="panel-title">Passphrase (mnemonic):</div>
+                    <div id="account-passphrase"></div>
+                </p>
+            </div>
+        </div>
+
+
+        <div class="panel">
+            <div class="panel-body">
+                <div>
+                    <button type="button" class="btn btn-primary" id="get_balance">Get Account Balance</button>
+                </div>
+
+                <p>
+                <div class="panel-title"></div>
+                <div id="account-address_2"></div>
+                <div id="account-balance"></div>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

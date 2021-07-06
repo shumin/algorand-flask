@@ -1,0 +1,106 @@
+{% extends "base_layout.html" %}
+
+{% block head %}
+{{ super() }}
+
+<script type="text/javascript">
+        function load_state() {
+            console.log('loading state...');
+            $.ajax({
+                url: "/app/transfer_state",
+                type: "GET",
+                success : function(data) {
+                    console.log(data);
+                     $('#sender-address').append(data['sender_add']);
+                     $('#sender-balance').append(data['sender_bal'] + ' micro Algo');
+
+                     $('#receiver-address').append(data['receiver_add']);
+                     $('#receiver-balance').append(data['receiver_bal'] + ' micro Algo');
+                },
+                error: function(data) {
+                    console.log(JSON.stringify(data));
+                }
+            });
+
+            return false;
+        }
+
+        $(document).ready(function () {
+            load_state();
+            $('#transfer_btn').click(function() {
+                $('#progress').show();
+                $.ajax({
+                    url: "/app/do/transfer",
+                    type: "GET",
+                    success : function(data) {
+                        console.log(data);
+                        $('#account-update').append('<div><b>Updated balance</b></div>');
+                        $('#account-update').append('<div>Sender: ' + data['sender_bal'] + ' micro algo</div>');
+                        $('#account-update').append('<div>Receiver: ' + data['receiver_bal'] + ' micro algo</div>');
+                        $('#account-update').append('<div><br/>Sender also paid 1000 mirco algos as fees</div>');
+                        $('#progress').hide();
+                    },
+                    error: function(data) {
+                        alert(data);
+                    }
+                });
+
+                return false;
+            });
+        });
+
+</script>
+
+{% endblock %}
+
+
+{% block content_body %}
+{{ super() }}
+<div class="row">
+
+    <!--Sidebar content-->
+    <div class="col-md-2">
+        <ul class="nav nav-pills nav-stacked">
+        </ul>
+    </div>
+
+    <!--Body content-->
+    <div class="col-md-10">
+        <h2>Transfer Algo between accounts</h2>
+
+        <div class="panel">
+            <div class="panel-body">
+                <p><h4>Initial Sender and Receiver Account Balance</h4></p>
+
+                <p>
+                <div class="panel-title"><b>Sender</b></div>
+                <div id="sender-address"></div>
+                <div id="sender-balance"></div>
+                </p>
+
+                <p>
+                <div class="panel-title"><b>Receiver</b></div>
+                <div id="receiver-address"></div>
+                <div id="receiver-balance"></div>
+                </p>
+            </div>
+        </div>
+
+
+        <div class="panel">
+            <div class="panel-body">
+                <p><h4>Transfer 2 Algos from Sender and Receiver Account</h4></p>
+                <button type="button" class="btn btn-primary" id="transfer_btn">Transfer Algos</button>
+
+                <p>
+                <img id="progress" src="https://media2.giphy.com/media/KG4PMQ0jyimywxNt8i/giphy.gif?cid=790b76114005d86f8efb309890189a6a97321aaf3452d6c8&rid=giphy.gif&ct=g" width="60" height="60" style="display:none"/>
+                <div id="account-update"></div>
+                </p>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}
