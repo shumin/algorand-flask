@@ -1,0 +1,4 @@
+py-algorand-sdk
+flask
+Flask-Bootstrap==3.3.7.0
+Jinja2
