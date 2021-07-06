@@ -1,0 +1,22 @@
+# IDEA Ignores
+*.iml
+*.ipr
+*.iws
+.idea/
+env
+local.properties
+
+# ignore cache folder
+__pycache__
+
+# MAC Ignores
+.DS_Store
+
+# Project Ignores
+.classpath
+.project
+.settings/
+build.properties
+out/production/
+out/
+target/
